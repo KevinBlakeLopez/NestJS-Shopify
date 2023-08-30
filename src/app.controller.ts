@@ -4,7 +4,7 @@ import {
   AccessMode,
   CurrentSession,
   UseShopifyAuth,
-  ShopifyAuthGuard,
+  // ShopifyAuthGuard,
 } from '@nestjs-shopify/auth';
 import { Session } from '@shopify/shopify-api';
 
@@ -13,8 +13,8 @@ export class AppController {
   constructor(private readonly appService: AppService) {}
 
   @Get()
+  // @UseGuards(ShopifyAuthGuard)
   @UseShopifyAuth(AccessMode.Online)
-  @UseGuards(ShopifyAuthGuard)
   async index(@CurrentSession() session: Session) {
     console.log(session);
     return this.appService.getHello();
