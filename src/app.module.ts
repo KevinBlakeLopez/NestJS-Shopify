@@ -11,15 +11,9 @@ import { ShopifyAuthModule } from '@nestjs-shopify/auth';
 
 @Module({
   imports: [
-    ShopifyAuthModule.forRootAsyncOnline({
-      useFactory: () => ({
-        basePath: 'user',
-      }),
-    }),
     ConfigModule.forRoot({
       isGlobal: true,
     }),
-    MyRedisSessionStorageModule,
     ShopifyCoreModule.forRootAsync({
       imports: [MyRedisSessionStorageModule],
       useFactory: async (
@@ -30,9 +24,26 @@ import { ShopifyAuthModule } from '@nestjs-shopify/auth';
           apiKey: configService.get('SHOPIFY_API_KEY'),
           apiSecretKey: configService.get('SHOPIFY_API_SECRET'),
           apiVersion: ApiVersion.Unstable,
-          hostName: configService.get('HOST').replace(/https:\/\//, ''),
+          hostName: 'http://localhost:4444',
+          scopes: ['read_products', 'write_products'],
+          sessionStorage,
           isEmbeddedApp: true,
-          scopes: ['test_scope'],
+          debug: true,
+        };
+      },
+      inject: [ConfigService],
+    }),
+    ShopifyAuthModule.forRootAsyncOnline({
+      imports: [MyRedisSessionStorageModule],
+      useFactory: async (
+        configService: ConfigService,
+        sessionStorage: MyRedisSessionStorage,
+      ) => {
+        return {
+          apiKey: configService.get('SHOPIFY_API_KEY'),
+          apiSecretKey: configService.get('SHOPIFY_API_SECRET'),
+          basePath: 'user',
+          debug: true,
           sessionStorage,
         };
       },
