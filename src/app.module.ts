@@ -24,7 +24,7 @@ import { ShopifyAuthModule } from '@nestjs-shopify/auth';
           apiKey: configService.get('SHOPIFY_API_KEY'),
           apiSecretKey: configService.get('SHOPIFY_API_SECRET'),
           apiVersion: ApiVersion.Unstable,
-          hostName: 'http://localhost:8080',
+          hostName: 'http://localhost:4444',
           scopes: ['read_products', 'write_products'],
           sessionStorage,
           isEmbeddedApp: true,
@@ -33,22 +33,22 @@ import { ShopifyAuthModule } from '@nestjs-shopify/auth';
       },
       inject: [ConfigService],
     }),
-    ShopifyAuthModule.forRootAsyncOnline({
-      imports: [MyRedisSessionStorageModule],
-      useFactory: (
-        configService: ConfigService,
-        sessionStorage: MyRedisSessionStorage,
-      ) => {
-        return {
-          apiKey: configService.get('SHOPIFY_API_KEY'),
-          apiSecretKey: configService.get('SHOPIFY_API_SECRET'),
-          basePath: 'user',
-          debug: true,
-          sessionStorage,
-        };
-      },
-      inject: [ConfigService],
-    }),
+    // ShopifyAuthModule.forRootAsyncOnline({
+    //   imports: [MyRedisSessionStorageModule],
+    //   useFactory: (
+    //     configService: ConfigService,
+    //     sessionStorage: MyRedisSessionStorage,
+    //   ) => {
+    //     return {
+    //       apiKey: configService.get('SHOPIFY_API_KEY'),
+    //       apiSecretKey: configService.get('SHOPIFY_API_SECRET'),
+    //       basePath: 'user',
+    //       debug: true,
+    //       sessionStorage,
+    //     };
+    //   },
+    //   inject: [ConfigService],
+    // }),
   ],
   controllers: [AppController],
   providers: [AppService],
